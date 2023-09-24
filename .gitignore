@@ -4,3 +4,4 @@ package-lock.json
 ./build
 .npmrc
 .idea
+records.json
