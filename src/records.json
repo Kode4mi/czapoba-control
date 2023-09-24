@@ -1,0 +1,10 @@
+{
+  "products": {
+    "code": 502,
+    "message": "Bad Gateway"
+  },
+  "auth": {
+    "code": 200,
+    "message": "OK"
+  }
+}
