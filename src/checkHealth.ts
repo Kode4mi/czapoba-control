@@ -1,6 +1,7 @@
 import ServiceRecords from "./ServiceRecords";
 import {Status, ServiceRoute} from "./types";
 import axios from "axios";
+import DiscordAlerts from "./DiscordAlerts";
 
 const checkHealth = async (serviceRoute: string, cookies: string[]) => {
     if (!(serviceRoute in ServiceRoute)){
@@ -24,6 +25,9 @@ const checkHealth = async (serviceRoute: string, cookies: string[]) => {
     } catch (error: any){
         status.code = error.response.status;
         status.message = error.response.statusText;
+
+        const discordAlerts = new DiscordAlerts();
+        await discordAlerts.send(serviceRoute, status);
     }
     await records.write(serviceRoute, status);
     console.log(`${serviceRoute} health:`, status);
