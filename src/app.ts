@@ -4,6 +4,7 @@ import axios from "axios";
 import {Status} from "./types";
 import ServiceRecords from "./ServiceRecords";
 import checkHealth from "./checkHealth";
+import tryToLogin from "./tryToLogin";
 
 const app = express();
 const port = 5249;
@@ -21,19 +22,6 @@ app.get('/', async (req, res) => {
 });
 
 app.listen(port,async () => {
-    const serviceRecords = new ServiceRecords();
-    try{
-        await axios.post('http://localhost/api/users/signin', {"email": "admin@czapoba.pl", "password": "admin"})
-            .then((response) => {
-                const setCookie = response.headers["set-cookie"];
-                if (setCookie === undefined) return;
-                cookies = setCookie;
-                serviceRecords.write("auth", {code: response.status, message: response.statusText})
-            })
-        console.log("Successfully logged in to czapoba")
-    } catch (error: any){
-        console.log("Failed to log in")
-        serviceRecords.write("auth", {code: error.response.status, message: error.response.statusText})
-    }
+    cookies = await tryToLogin();
     console.log(`Server is running on port ${port}`);
 });

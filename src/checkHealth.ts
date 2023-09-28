@@ -2,6 +2,7 @@ import ServiceRecords from "./ServiceRecords";
 import {Status, ServiceRoute} from "./types";
 import axios from "axios";
 import DiscordAlerts from "./DiscordAlerts";
+import tryToLogin from "./tryToLogin";
 
 const checkHealth = async (serviceRoute: string, cookies: string[]) => {
     if (!(serviceRoute in ServiceRoute)){
@@ -26,6 +27,7 @@ const checkHealth = async (serviceRoute: string, cookies: string[]) => {
         status.code = error.response.status;
         status.message = error.response.statusText;
 
+        if(status.code === 401) await tryToLogin();
         const discordAlerts = new DiscordAlerts();
         await discordAlerts.send(serviceRoute, status);
     }
