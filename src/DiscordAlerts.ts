@@ -30,9 +30,9 @@ export default class DiscordAlerts {
                 ]
             });
 
-            console.log("Alert sent on discord")
+            console.log(`${new Date().toLocaleTimeString()}: Alert sent on discord`)
         } catch (error) {
-            console.error('An error occurred while sending alert', error);
+            console.error(`${new Date().toLocaleTimeString()}: An error occurred while sending alert`, error);
         }
     }
 }

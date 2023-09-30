@@ -4,12 +4,12 @@ import axios from "axios";
 import DiscordAlerts from "./DiscordAlerts";
 import tryToLogin from "./tryToLogin";
 
-const checkHealth = async (serviceRoute: string, cookies: string[]) => {
+const checkHealth = async (serviceRoute: string, cookies: string[], updateCookies?: Function) => {
     if (!(serviceRoute in ServiceRoute)){
         return {code: 404, message: `Bad request! There is no service route: '${serviceRoute}'`}
     }
 
-    console.log(`Checking health of ${serviceRoute}...`);
+    console.log(`${new Date().toLocaleTimeString()}| Checking health of ${serviceRoute}...`);
 
     const records: ServiceRecords = new ServiceRecords();
     const status: Status = {code: 0, message: ""};
@@ -27,12 +27,15 @@ const checkHealth = async (serviceRoute: string, cookies: string[]) => {
         status.code = error.response.status;
         status.message = error.response.statusText;
 
-        if(status.code === 401) await tryToLogin();
+        if(status.code === 401 && updateCookies !== undefined) {
+            updateCookies(await tryToLogin());
+            return status;
+        }
         const discordAlerts = new DiscordAlerts();
         await discordAlerts.send(serviceRoute, status);
     }
     await records.write(serviceRoute, status);
-    console.log(`${serviceRoute} health:`, status);
+    console.log(`${new Date().toLocaleTimeString()}| ${serviceRoute} health:`, status);
 
     return status;
 }

@@ -14,9 +14,9 @@ const tryToLogin = async () => {
                 cookies = setCookie;
                 serviceRecords.write("auth", {code: response.status, message: response.statusText})
             })
-        console.log("Successfully logged in to czapoba")
+        console.log(`${new Date().toLocaleTimeString()}| Successfully logged in to czapoba`)
     } catch (error: any) {
-        console.log("Failed to log in")
+        console.log(`${new Date().toLocaleTimeString()}| Failed to log in`)
         const status: Status = {code: error.response.status, message: error.response.statusText}
         await serviceRecords.write("auth", status)
 

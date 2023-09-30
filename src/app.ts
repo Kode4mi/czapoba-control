@@ -5,10 +5,15 @@ import {Status} from "./types";
 import ServiceRecords from "./ServiceRecords";
 import checkHealth from "./checkHealth";
 import tryToLogin from "./tryToLogin";
+import cronJobs from "./cronJobs";
 
 const app = express();
 const port = 5249;
 let cookies: string[] = [""];
+
+const updateCookies = (newCookies: string[]) => {
+    cookies = newCookies;
+}
 
 app.get('/:serviceRoute', async (req, res) => {
     let status: Status = {code: 0, message: "unknown"};
@@ -23,5 +28,9 @@ app.get('/', async (req, res) => {
 
 app.listen(port,async () => {
     cookies = await tryToLogin();
-    console.log(`Server is running on port ${port}`);
+    console.log(`${new Date().toLocaleTimeString()}| Server is running on port ${port}`);
+    await checkHealth("products", cookies);
+    await checkHealth("offers", cookies);
+    await checkHealth("contractors", cookies);
+    cronJobs(cookies, 5, updateCookies);
 });
