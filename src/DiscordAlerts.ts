@@ -9,7 +9,8 @@ const colors: {[key: number]: number } = {
 export default class DiscordAlerts {
     public async send(serviceName: string, status: Status) {
         try {
-            await axios.post("https://discord.com/api/webhooks/1155928479502696479/BPwpuz-msBSy8Vz_oCke8YFwSdSTIfi1FBVUXi0zQzTaNGHdOW-0FJh04KVlT7B1rd_t", {
+            if (!process.env.DISCORD_WEBHOOK_URL) return console.error("Discord webhook url not specified");
+            await axios.post(process.env.DISCORD_WEBHOOK_URL, {
                 "username": "CZAPOBA control",
                 "avatar_url": "https://i.imgur.com/c5WKNBG.png",
                 "embeds": [
