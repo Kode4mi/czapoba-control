@@ -6,5 +6,13 @@ export interface Status {
 export enum ServiceRoute {
     products = "products",
     offers = "offers",
-    contractors = "contractors"
+    contractors = "contractors",
+    users = "users"
 }
+
+export const serviceRouteTab: ServiceRoute[] = [
+    ServiceRoute.products,
+    ServiceRoute.offers,
+    ServiceRoute.contractors,
+    ServiceRoute.users
+]

@@ -1,7 +1,8 @@
 // src/app.ts
+import 'dotenv/config'
 import express from 'express';
 import axios from "axios";
-import {Status} from "./types";
+import {serviceRouteTab, Status} from "./types";
 import ServiceRecords from "./ServiceRecords";
 import checkHealth from "./checkHealth";
 import tryToLogin from "./tryToLogin";
@@ -29,8 +30,8 @@ app.get('/', async (req, res) => {
 app.listen(port,async () => {
     cookies = await tryToLogin();
     console.log(`${new Date().toLocaleTimeString()}| Server is running on port ${port}`);
-    await checkHealth("products", cookies);
-    await checkHealth("offers", cookies);
-    await checkHealth("contractors", cookies);
+    for (const srv of serviceRouteTab) {
+        await checkHealth(srv, cookies);
+    }
     cronJobs(cookies, 5, updateCookies);
 });

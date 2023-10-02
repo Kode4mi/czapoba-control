@@ -7,7 +7,8 @@ const tryToLogin = async () => {
     let cookies: string[] = [""];
     const serviceRecords = new ServiceRecords();
     try{
-        await axios.post('http://localhost/api/users/signin', {"email": "admin@czapoba.pl", "password": "admin"})
+        if (!process.env.LOGIN_URL) {console.error("LOGIN URL NOT SPECIFIED"); return [""]};
+        await axios.post(process.env.LOGIN_URL, {"email": process.env.EMAIL, "password": process.env.PASSWORD})
             .then((response) => {
                 const setCookie = response.headers["set-cookie"];
                 if (setCookie === undefined) return;

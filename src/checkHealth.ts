@@ -14,7 +14,7 @@ const checkHealth = async (serviceRoute: string, cookies: string[], updateCookie
     const records: ServiceRecords = new ServiceRecords();
     const status: Status = {code: 0, message: ""};
     try {
-        await axios.get(`http://localhost/api/${serviceRoute}/health`,
+        await axios.get(`${process.env.APP_URL}/${serviceRoute}/health`,
             {
                 headers: {
                     Cookie: cookies
